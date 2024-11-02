@@ -9,6 +9,9 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
     clock_out = datetime.strptime(dailyAct[1], '%H:%M') #convert to datetime object
     clock_out_total_minutes = clock_out.hour * 60 + clock_out.minute #calculate the total minutes corresponding to given time
 
+    if not schedule: #checks for an empty schedule
+        return [[clock_in_total_minutes,clock_out_total_minutes]]
+
     for i in range(len(schedule)-1): #loop through the person's schedule list
         start_time = datetime.strptime(schedule[i][1], '%H:%M') #get the end time of a meeting, which would be the start of a free time interval
         start_total_minutes = start_time.hour * 60 + start_time.minute #convert to minutes
