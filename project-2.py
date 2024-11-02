@@ -46,8 +46,10 @@ def findValidTimes(person1, person2, duration): #find overlaps in both person's 
             earliest_end = min(person1[i][1], person2[j][1]) #find the earliest end time
 
             if earliest_end-latest_start>=duration: #if the difference is more than or equal to the duration of the meeting
-                valid_times.append([latest_start, earliest_end]) #add time interval to valid times list
-
+                valid_start='{:02d}:{:02d}'.format(*divmod(latest_start, 60)) #convert to HH:MM format
+                valid_end='{:02d}:{:02d}'.format(*divmod(earliest_end, 60)) #convert to HH:MM format
+                valid_times.append([valid_start, valid_end]) #add time interval to valid times list
+                
     return valid_times #return list of valid time intervals
 
 
