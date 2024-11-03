@@ -20,7 +20,6 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
         end_total_minutes = end_time.hour * 60 + end_time.minute #convert to minutes
 
         start_clock_in_difference = start_total_minutes-clock_in_total_minutes #calculate the difference between the start of their free time and their clock in time
-        end_clock_out_difference = end_total_minutes-clock_out_total_minutes
 
         if start_clock_in_difference >= 0: #if difference is more than or equal to 0, it is within their clock in and clock out time
             free_time.append([start_total_minutes, end_total_minutes]) #add to free time list
@@ -42,19 +41,25 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
 def findValidTimes(person1, person2, duration): #find overlaps in both person's free times
     valid_times=[] #initilize valid times list
 
-    #for every free time interval for person 1, compare to each free time interval in person 2's list
-    for i in range(len(person1)): #iterate through every free time interval in person 1's list
-        for j in range(len(person2)): #iterate through every free time interval in person 2's list
-            latest_start = max(person1[i][0], person2[j][0]) #find the last start time
-            earliest_end = min(person1[i][1], person2[j][1]) #find the earliest end time
+    #initialize i and j for while loop
+    i=0
+    j=0
 
-            if earliest_end-latest_start>=duration: #if the difference is more than or equal to the duration of the meeting
-                valid_start='{:02d}:{:02d}'.format(*divmod(latest_start, 60)) #convert to HH:MM format
-                valid_end='{:02d}:{:02d}'.format(*divmod(earliest_end, 60)) #convert to HH:MM format
-                valid_times.append([valid_start, valid_end]) #add time interval to valid times list
-                
+    while i<len(person1) and j<len(person2): #iterate through both person's schedules
+        latest_start = max(person1[i][0], person2[j][0]) #find the latest start time
+        earliest_end = min(person1[i][1], person2[j][1]) #find the earliest end time
+
+        if earliest_end-latest_start>=duration: #if the difference is more than or equal to the duration of the meeting
+            valid_start='{:02d}:{:02d}'.format(*divmod(latest_start, 60)) #convert to HH:MM format
+            valid_end='{:02d}:{:02d}'.format(*divmod(earliest_end, 60)) #convert to HH:MM format
+            valid_times.append([valid_start, valid_end]) #add time interval to valid times list
+
+        if person1[i][1]<person2[j][1]: #if person1's end time is earlier than person2's end time
+            i+=1 #iterate to next free time interval for person1
+        else:
+            j+=1 #iterate to next free time interval for person2
+
     return valid_times #return list of valid time intervals
-
 
 # Sample Input
 person1_Schedule = [['7:00', '8:30'], ['12:00', '13:00'], ['16:00', '18:00']]
