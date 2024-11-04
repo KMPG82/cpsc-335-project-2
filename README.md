@@ -3,19 +3,23 @@ Group: Kevin Ponting,
 Instructions:
 
 1. Install Python:
+
    -Please download Python from https://www.python.org/downloads/ if not
    already installed.
 
-2. Set up Visual Studio Code:
+3. Set up Visual Studio Code:
+
    -Open Visual Studio Code, click on extensions (on the left side bar).
 
    -Type Python in the search box, and install the Python extension by
    Microsoft if not already installed.
 
-3. Open the Program:
+4. Open the Program:
+
    -Open Project2_starter.py file in Visual Studio Code.
 
-4. Run the Program:
+6. Run the Program:
+
    -Hover over the play button (it should look like this: ▶) near the
    top right corner of the window. If it doesn't say "Run Python File",
    click on the arrow pointing down that is next to the play button and
