@@ -96,7 +96,6 @@ duration_of_meeting = 30
 # [[’10:30’, ’12:00’], [’15:00’, ’16:00’], [’18:00’, ’18:30’]]
 
 person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
-
 person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
 
 person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
@@ -106,3 +105,35 @@ valid_times=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
 print('valid intervals in min: ', valid_times)
 converted_back=convertTo24Format(valid_times)
 print('valid intervals in 24 format: ', converted_back)
+
+
+# Person 1's schedule and working hours
+person1_Schedule = [['8:00', '9:30'], ['12:00', '13:30'], ['16:00', '17:30']]
+person1_DailyAct = ['9:00', '18:00']
+
+# Person 2's schedule and working hours
+person2_Schedule = [['9:00', '10:00'], ['11:30', '13:00'], ['15:00', '16:30']]
+person2_DailyAct = ['9:00', '18:00']
+
+# Person 3's schedule and working hours
+person3_Schedule = [['9:30', '10:30'], ['12:30', '14:00'], ['16:00', '17:00']]
+person3_DailyAct = ['9:00', '18:00']
+
+# Minimum meeting duration in minutes
+duration_of_meeting = 30
+
+person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
+person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
+person3_Schedule_Minutes, person3_DailyAct_Minutes=convertToMinutes(person3_Schedule, person3_DailyAct)
+
+person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
+person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
+person3_Gaps=findFreeTimes(person3_Schedule_Minutes, person3_DailyAct_Minutes)
+
+valid_times1=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
+valid_times2=findValidTimes(valid_times1, person3_Gaps, duration_of_meeting)
+print('valid intervals in min: ', valid_times2)
+converted_back=convertTo24Format(valid_times2)
+print('valid intervals in 24 format: ', converted_back)
+
+
