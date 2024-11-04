@@ -1,4 +1,4 @@
-Group: Kevin Ponting,
+Group: Kevin Ponting, Alex Labitigan, Kali Ingco, John Paik
 
 Instructions:
 
