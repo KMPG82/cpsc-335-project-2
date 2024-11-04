@@ -1,7 +1,7 @@
 from datetime import datetime
 
 def convertToMinutes(schedule, dailyAct):
-    minute_intervals=[]
+    minute_intervals=[] #initialize intervals in minutes list
 
     clock_in = datetime.strptime(dailyAct[0], '%H:%M') #convert to datetime object
     clock_in_total_minutes = clock_in.hour * 60 + clock_in.minute #calculate the total minutes corresponding to given time
@@ -9,38 +9,39 @@ def convertToMinutes(schedule, dailyAct):
     clock_out = datetime.strptime(dailyAct[1], '%H:%M') #convert to datetime object
     clock_out_total_minutes = clock_out.hour * 60 + clock_out.minute #calculate the total minutes corresponding to given time
     
-    daily_act_minutes=[clock_in_total_minutes, clock_out_total_minutes]
+    daily_act_minutes=[clock_in_total_minutes, clock_out_total_minutes] #add clock in and out converted to minutes to a list
     
     for i in range(len(schedule)):
-        start_time = datetime.strptime(schedule[i][0], '%H:%M') 
-        start_total_minutes = start_time.hour * 60 + start_time.minute 
+        start_time = datetime.strptime(schedule[i][0], '%H:%M') #convert to datetime object 
+        start_total_minutes = start_time.hour * 60 + start_time.minute #calculate the total minutes corresponding to given time
 
-        end_time = datetime.strptime(schedule[i][1], '%H:%M') 
-        end_total_minutes = end_time.hour * 60 + end_time.minute
+        end_time = datetime.strptime(schedule[i][1], '%H:%M') #convert to datetime object
+        end_total_minutes = end_time.hour * 60 + end_time.minute #calculate the total minutes corresponding to given time
 
-        minute_intervals.append([start_total_minutes, end_total_minutes])
+        minute_intervals.append([start_total_minutes, end_total_minutes]) #add to intervals in minutes list
 
-    return minute_intervals, daily_act_minutes
+    return minute_intervals, daily_act_minutes #return both lists containing intervals converted to minutes
 
 def convertTo24Format(schedule):
-    converted_schedule=[]
-    for i in range(len(schedule)):
+    converted_schedule=[] #initialize the converted to 24 hour format list
+
+    for i in range(len(schedule)): #iterate through the schedule
         start='{:02d}:{:02d}'.format(*divmod(schedule[i][0], 60)) #convert to HH:MM format
         end='{:02d}:{:02d}'.format(*divmod(schedule[i][1], 60)) #convert to HH:MM format
-        converted_schedule.append([start, end]) #add time interval to valid times list
+        converted_schedule.append([start, end]) #add converted interval to the converted schedule list
 
-    return converted_schedule
+    return converted_schedule #return the list containing time intervals in 24 hour format
 
 def findFreeTimes(schedule, dailyAct): #function that finds intervals of free times in a schedule
     free_time=[] #initilizae free time list
 
-    clock_in = dailyAct[0]
-    clock_out = dailyAct[1]
+    clock_in = dailyAct[0] #initialize clock in time
+    clock_out = dailyAct[1] #initialize clock out time
 
     if not schedule: #checks for an empty schedule
         return [[clock_in, clock_out]]
 
-    for i in range(len(schedule)-1): #loop through the person's schedule list
+    for i in range(len(schedule)-1): #loop through the schedule
         start_time = schedule[i][1] #get the end time of a meeting, which would be the start of a free time interval
 
         end_time = schedule[i+1][0] #get start time of the next meeting, which would be the end of a free time interval
@@ -60,7 +61,6 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
             if end_of_last_clock_out_differnece <= 0: #if the difference is less than or equal to 0 
                 free_time.append([end_of_last_meeting, clock_out]) #add to free time list
 
-    print('schedule:', free_time) #for testing
     return free_time #return list of time intervals when the person is free
 
 def findValidTimes(schedule1, schedule2, duration): #find overlaps in both person's free times
@@ -96,12 +96,8 @@ duration_of_meeting = 30
 # [[’10:30’, ’12:00’], [’15:00’, ’16:00’], [’18:00’, ’18:30’]]
 
 person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
-# print('schedule in minutes: ', person1_Schedule_Minutes)
-# print('daily act in min: ', person1_DailyAct_Minutes)
 
 person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
-# print('schedule in minutes: ', person2_Schedule_Minutes)
-# print('daily act in min: ', person2_DailyAct_Minutes)
 
 person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
 person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
