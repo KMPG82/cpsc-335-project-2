@@ -13,7 +13,7 @@ Instructions:
    Microsoft if not already installed.
 
 3. Open the Program:
-   -Open project-1-algo-1.py file in Visual Studio Code.
+   -Open Project2_starter.py file in Visual Studio Code.
 
 4. Run the Program:
    -Hover over the play button (it should look like this: ▶) near the
