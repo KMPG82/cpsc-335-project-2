@@ -6,8 +6,11 @@ def convertToMinutes(schedule, dailyAct):
     clock_in = datetime.strptime(dailyAct[0], '%H:%M') #convert to datetime object
     clock_in_total_minutes = clock_in.hour * 60 + clock_in.minute #calculate the total minutes corresponding to given time
    
-    clock_out = datetime.strptime(dailyAct[1], '%H:%M') #convert to datetime object
-    clock_out_total_minutes = clock_out.hour * 60 + clock_out.minute #calculate the total minutes corresponding to given time
+    if dailyAct[1] == '00:00': # handles midnight edge case
+        clock_out_total_minutes = 24 * 60
+    else:
+        clock_out = datetime.strptime(dailyAct[1], '%H:%M') #convert to datetime object
+        clock_out_total_minutes = clock_out.hour * 60 + clock_out.minute #calculate the total minutes corresponding to given time
     
     daily_act_minutes=[clock_in_total_minutes, clock_out_total_minutes] #add clock in and out converted to minutes to a list
     
@@ -33,12 +36,12 @@ def convertTo24Format(schedule):
     return converted_schedule #return the list containing time intervals in 24 hour format
 
 def findFreeTimes(schedule, dailyAct): #function that finds intervals of free times in a schedule
-    free_time=[] #initilizae free time list
+    free_time=[] #initialize free time list
 
     clock_in = dailyAct[0] #initialize clock in time
     clock_out = dailyAct[1] #initialize clock out time
 
-    if not schedule: #checks for an empty schedule
+    if not schedule: # handles empty schedule edge case
         return [[clock_in, clock_out]]
 
     for i in range(len(schedule)-1): #loop through the schedule
@@ -56,15 +59,15 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
         if i+1==len(schedule)-1: #when we are at the last meeting in their schedule
             end_of_last_meeting = schedule[i+1][1]#get the ending time of the last meeting
 
-            end_of_last_clock_out_differnece = end_of_last_meeting-clock_out #calculate the difference
+            end_of_last_clock_out_difference = end_of_last_meeting-clock_out #calculate the difference
 
-            if end_of_last_clock_out_differnece <= 0: #if the difference is less than or equal to 0 
+            if end_of_last_clock_out_difference <= 0: #if the difference is less than or equal to 0 
                 free_time.append([end_of_last_meeting, clock_out]) #add to free time list
 
     return free_time #return list of time intervals when the person is free
 
 def findValidTimes(schedule1, schedule2, duration): #find overlaps in both person's free times
-    valid_times=[] #initilize valid times list
+    valid_times=[] #initialize valid times list
 
     #initialize i and j for while loop
     i=0 #will iterate through first schedule
