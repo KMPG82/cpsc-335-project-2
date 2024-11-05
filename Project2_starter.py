@@ -5,17 +5,17 @@ def convertToMinutes(schedule, dailyAct):
 
     clock_in = datetime.strptime(dailyAct[0], '%H:%M') #convert to datetime object
     clock_in_total_minutes = clock_in.hour * 60 + clock_in.minute #calculate the total minutes corresponding to given time
-   
+
     if dailyAct[1] == '00:00': # handles midnight edge case
         clock_out_total_minutes = 24 * 60
     else:
         clock_out = datetime.strptime(dailyAct[1], '%H:%M') #convert to datetime object
         clock_out_total_minutes = clock_out.hour * 60 + clock_out.minute #calculate the total minutes corresponding to given time
-    
+
     daily_act_minutes=[clock_in_total_minutes, clock_out_total_minutes] #add clock in and out converted to minutes to a list
-    
+
     for i in range(len(schedule)):
-        start_time = datetime.strptime(schedule[i][0], '%H:%M') #convert to datetime object 
+        start_time = datetime.strptime(schedule[i][0], '%H:%M') #convert to datetime object
         start_total_minutes = start_time.hour * 60 + start_time.minute #calculate the total minutes corresponding to given time
 
         end_time = datetime.strptime(schedule[i][1], '%H:%M') #convert to datetime object
@@ -48,7 +48,7 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
         start_time = schedule[i][1] #get the end time of a meeting, which would be the start of a free time interval
 
         end_time = schedule[i+1][0] #get start time of the next meeting, which would be the end of a free time interval
-        
+
         start_clock_in_difference = start_time-clock_in #calculate the difference between the start of their free time and their clock in time
 
         if start_clock_in_difference >= 0: #if difference is more than or equal to 0, it is within their clock in and clock out time
@@ -61,7 +61,7 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
 
             end_of_last_clock_out_difference = end_of_last_meeting-clock_out #calculate the difference
 
-            if end_of_last_clock_out_difference <= 0: #if the difference is less than or equal to 0 
+            if end_of_last_clock_out_difference <= 0: #if the difference is less than or equal to 0
                 free_time.append([end_of_last_meeting, clock_out]) #add to free time list
 
     return free_time #return list of time intervals when the person is free
@@ -135,3 +135,22 @@ converted_back=convertTo24Format(valid_times2)
 print('valid intervals in 24 format: ', converted_back)
 #sample #2 output
 #[['10:30', '11:30'], ['14:00', '15:00'], ['17:30', '18:00']]
+
+#sample input #3
+person1_Schedule = [['8:00', '10:30'], ['12:40', '13:30'], ['16:20', '17:50']]
+person1_DailyAct = ['8:00', '18:00']
+person2_Schedule = [['9:30', '10:30'], ['11:30', '13:30'], ['15:00', '17:30']]
+person2_DailyAct = ['8:00', '18:00']
+duration_of_meeting = 45
+
+person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
+person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
+
+person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
+person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
+
+valid_times=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
+converted_back=convertTo24Format(valid_times)
+print('valid intervals in 24 format: ', converted_back)
+#sample #3 output
+#[['10:30', '11:30'], ['13:30', '15:00']]
