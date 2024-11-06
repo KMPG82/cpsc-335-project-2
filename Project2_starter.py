@@ -43,6 +43,9 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
 
     if not schedule: # handles empty schedule edge case
         return [[clock_in, clock_out]]
+
+    if schedule[0][0]-clock_in > 0: #check if there is a free gap between clock in and the start of their first meeting
+        free_time.append([clock_in, schedule[0][0]]) #add to free time list
     
     if len(schedule) == 1: # handles one busy time slot
         start_time = schedule[0][1] #get the end time of a meeting, which would be the start of a free time interval
