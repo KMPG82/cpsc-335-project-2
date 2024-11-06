@@ -103,43 +103,45 @@ def findValidTimes(schedule1, schedule2, duration): #find overlaps in both perso
     return valid_times #return list of valid time intervals
 
 #BELOW CODE IS NOT PART OF THE ALGORITHM, ONLY READS INPUT FROM INPUT.TXT FILE
-with open('input.txt', 'r') as file:
+output=None
+with open('input.txt', 'r') as file, open('output.txt', 'w') as output_file:
     content = file.read().strip().split("\n\n")  #split by double newlines for each test case
 
-for case in content:
-    lines = case.strip().splitlines()
-    schedules = []
-    clock_in_out = []
-    duration_of_meeting = None
+    for case in content:
+        lines = case.strip().splitlines()
+        schedules = []
+        clock_in_out = []
+        duration_of_meeting = None
 
-    for line in lines:
-        if line.startswith("duration_of_meeting"): #indicator of meeting duration
-            duration_of_meeting = int(line.split('=')[1].strip()) #get meeting duration
+        for line in lines:
+            if line.startswith("duration_of_meeting"): #indicator of meeting duration
+                duration_of_meeting = int(line.split('=')[1].strip()) #get meeting duration
 
-        elif line.startswith("person"): #indicator of a individual person
-            if "Schedule" in line: #indicator of a schedule
-                schedule_str = line.split("=")[1].strip() #parse
-                schedule = eval(schedule_str) #convert string to list
-                schedules.append(schedule) #add to schedule list
-            elif "DailyAct" in line: #indicator of clock in/out time
-                daily_act_str = line.split("=")[1].strip() #parse
-                daily_act = eval(daily_act_str)  #convert string to list
-                clock_in_out.append(daily_act) #add to clock in and out times
-        else:
-            free_time_intervals=[] #intialize free time intervals list
-            for i in range(len(schedules)): #iterate through each schedule
-                schedules[i], clock_in_out[i]=convertToMinutes(schedules[i], clock_in_out[i]) #convert schedule to minutes
-                free_time_intervals.append(findFreeTimes(schedules[i], clock_in_out[i])) #find free times in schedule
+            elif line.startswith("person"): #indicator of a individual person
+                if "Schedule" in line: #indicator of a schedule
+                    schedule_str = line.split("=")[1].strip() #parse
+                    schedule = eval(schedule_str) #convert string to list
+                    schedules.append(schedule) #add to schedule list
+                elif "DailyAct" in line: #indicator of clock in/out time
+                    daily_act_str = line.split("=")[1].strip() #parse
+                    daily_act = eval(daily_act_str)  #convert string to list
+                    clock_in_out.append(daily_act) #add to clock in and out times
+            else:
+                free_time_intervals=[] #intialize free time intervals list
+                for i in range(len(schedules)): #iterate through each schedule
+                    schedules[i], clock_in_out[i]=convertToMinutes(schedules[i], clock_in_out[i]) #convert schedule to minutes
+                    free_time_intervals.append(findFreeTimes(schedules[i], clock_in_out[i])) #find free times in schedule
 
-            while len(free_time_intervals) > 1: #find valid times by iterating through free time intervals and finding overlaps
-                valid_times=findValidTimes(free_time_intervals[-2], free_time_intervals[-1], duration_of_meeting) #find overlaps
-                #pop the last two free time intervals off the list
-                free_time_intervals.pop() 
-                free_time_intervals.pop()
-                free_time_intervals.append(valid_times) #append the valid times interval to the back of the free times interval list to check for overlap with remaining intervals 
+                while len(free_time_intervals) > 1: #find valid times by iterating through free time intervals and finding overlaps
+                    valid_times=findValidTimes(free_time_intervals[-2], free_time_intervals[-1], duration_of_meeting) #find overlaps
+                    #pop the last two free time intervals off the list
+                    free_time_intervals.pop() 
+                    free_time_intervals.pop()
+                    free_time_intervals.append(valid_times) #append the valid times interval to the back of the free times interval list to check for overlap with remaining intervals 
 
-            output=convertTo24Format(free_time_intervals[0]) #list of valid times
+                output=convertTo24Format(free_time_intervals[0]) #list of valid times
+                output_file.write(f"{output}\n\n")
+                print(output)
+                schedules=[] #empty schedules list for next test case
+                clock_in_out=[] #empty clock in/out list for next test case
 
-            print(output)
-            schedules=[] #empty schedules list for next test case
-            clock_in_out=[] #empty clock in/out list for next test case
