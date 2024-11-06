@@ -45,12 +45,9 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
         return [[clock_in, clock_out]]
     
     if len(schedule) == 1: # handles one busy time slot
-        return [[schedule[0][1], clock_out]]
+        start_time = schedule[0][1] #get the end time of a meeting, which would be the start of a free time interval
 
-    for i in range(len(schedule)-1): #loop through the schedule
-        start_time = schedule[i][1] #get the end time of a meeting, which would be the start of a free time interval
-
-        end_time = schedule[i+1][0] #get start time of the next meeting, which would be the end of a free time interval
+        end_time = clock_out #get start time of the next meeting, which would be the end of a free time interval
 
         start_clock_in_difference = start_time-clock_in #calculate the difference between the start of their free time and their clock in time
 
@@ -58,14 +55,26 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
             free_time.append([start_time, end_time]) #add to free time list
         else:
             free_time.append([clock_in, end_time]) #if not, free time interval will start when they clock in and will last until time of next meeting
+    else:
+        for i in range(len(schedule)-1): #loop through the schedule
+            start_time = schedule[i][1] #get the end time of a meeting, which would be the start of a free time interval
 
-        if i+1==len(schedule)-1: #when we are at the last meeting in their schedule
-            end_of_last_meeting = schedule[i+1][1]#get the ending time of the last meeting
+            end_time = schedule[i+1][0] #get start time of the next meeting, which would be the end of a free time interval
 
-            end_of_last_clock_out_difference = end_of_last_meeting-clock_out #calculate the difference
+            start_clock_in_difference = start_time-clock_in #calculate the difference between the start of their free time and their clock in time
 
-            if end_of_last_clock_out_difference <= 0: #if the difference is less than or equal to 0
-                free_time.append([end_of_last_meeting, clock_out]) #add to free time list
+            if start_clock_in_difference >= 0: #if difference is more than or equal to 0, it is within their clock in and clock out time
+                free_time.append([start_time, end_time]) #add to free time list
+            else:
+                free_time.append([clock_in, end_time]) #if not, free time interval will start when they clock in and will last until time of next meeting
+
+            if i+1==len(schedule)-1: #when we are at the last meeting in their schedule
+                end_of_last_meeting = schedule[i+1][1]#get the ending time of the last meeting
+
+                end_of_last_clock_out_difference = end_of_last_meeting-clock_out #calculate the difference
+
+                if end_of_last_clock_out_difference <= 0: #if the difference is less than or equal to 0
+                    free_time.append([end_of_last_meeting, clock_out]) #add to free time list
 
     return free_time #return list of time intervals when the person is free
 
