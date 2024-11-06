@@ -102,70 +102,44 @@ def findValidTimes(schedule1, schedule2, duration): #find overlaps in both perso
 
     return valid_times #return list of valid time intervals
 
-#sample input #1
-person1_Schedule = [['7:00', '8:30'], ['12:00', '13:00'], ['16:00', '18:00']]
-person1_DailyAct = ['9:00', '19:00']
+#BELOW CODE IS NOT PART OF THE ALGORITHM, ONLY READS INPUT FROM INPUT.TXT FILE
+with open('input.txt', 'r') as file:
+    content = file.read().strip().split("\n\n")  #split by double newlines for each test case
 
-person2_Schedule = [['9:00', '10:30'], ['12:20', '13:30'], ['14:00', '15:00'], ['16:00', '17:00']]
-person2_DailyAct = ['9:00', '18:30']
+for case in content:
+    lines = case.strip().splitlines()
+    schedules = []
+    clock_in_out = []
+    duration_of_meeting = None
 
-duration_of_meeting = 30
+    for line in lines:
+        if line.startswith("duration_of_meeting"): #indicator of meeting duration
+            duration_of_meeting = int(line.split('=')[1].strip()) #get meeting duration
 
-person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
-person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
+        elif line.startswith("person"): #indicator of a individual person
+            if "Schedule" in line: #indicator of a schedule
+                schedule_str = line.split("=")[1].strip() #parse
+                schedule = eval(schedule_str) #convert string to list
+                schedules.append(schedule) #add to schedule list
+            elif "DailyAct" in line: #indicator of clock in/out time
+                daily_act_str = line.split("=")[1].strip() #parse
+                daily_act = eval(daily_act_str)  #convert string to list
+                clock_in_out.append(daily_act) #add to clock in and out times
+        else:
+            free_time_intervals=[] #intialize free time intervals list
+            for i in range(len(schedules)): #iterate through each schedule
+                schedules[i], clock_in_out[i]=convertToMinutes(schedules[i], clock_in_out[i]) #convert schedule to minutes
+                free_time_intervals.append(findFreeTimes(schedules[i], clock_in_out[i])) #find free times in schedule
 
-person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
-person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
+            while len(free_time_intervals) > 1: #find valid times by iterating through free time intervals and finding overlaps
+                valid_times=findValidTimes(free_time_intervals[-2], free_time_intervals[-1], duration_of_meeting) #find overlaps
+                #pop the last two free time intervals off the list
+                free_time_intervals.pop() 
+                free_time_intervals.pop()
+                free_time_intervals.append(valid_times) #append the valid times interval to the back of the free times interval list to check for overlap with remaining intervals 
 
-valid_times=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
-converted_back=convertTo24Format(valid_times)
-print('valid intervals in 24 format: ', converted_back)
-#sample #1 output
-#[[’10:30’, ’12:00’], [’15:00’, ’16:00’], [’18:00’, ’18:30’]]
+            output=convertTo24Format(free_time_intervals[0]) #list of valid times
 
-#sample input #2
-person1_Schedule = [['8:00', '9:30'], ['12:00', '13:30'], ['16:00', '17:30']]
-person1_DailyAct = ['9:00', '18:00']
-
-person2_Schedule = [['9:00', '10:00'], ['11:30', '13:00'], ['15:00', '16:30']]
-person2_DailyAct = ['9:00', '18:00']
-
-person3_Schedule = [['9:30', '10:30'], ['12:30', '14:00'], ['16:00', '17:00']]
-person3_DailyAct = ['9:00', '18:00']
-
-duration_of_meeting = 30
-
-person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
-person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
-person3_Schedule_Minutes, person3_DailyAct_Minutes=convertToMinutes(person3_Schedule, person3_DailyAct)
-
-person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
-person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
-person3_Gaps=findFreeTimes(person3_Schedule_Minutes, person3_DailyAct_Minutes)
-
-valid_times1=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
-valid_times2=findValidTimes(valid_times1, person3_Gaps, duration_of_meeting)
-
-converted_back=convertTo24Format(valid_times2)
-print('valid intervals in 24 format: ', converted_back)
-#sample #2 output
-#[['10:30', '11:30'], ['14:00', '15:00'], ['17:30', '18:00']]
-
-#sample input #3
-person1_Schedule = [['8:00', '10:30'], ['12:40', '13:30'], ['16:20', '17:50']]
-person1_DailyAct = ['8:00', '18:00']
-person2_Schedule = [['9:30', '10:30'], ['11:30', '13:30'], ['15:00', '17:30']]
-person2_DailyAct = ['8:00', '18:00']
-duration_of_meeting = 45
-
-person1_Schedule_Minutes, person1_DailyAct_Minutes=convertToMinutes(person1_Schedule, person1_DailyAct)
-person2_Schedule_Minutes, person2_DailyAct_Minutes=convertToMinutes(person2_Schedule, person2_DailyAct)
-
-person1_Gaps=findFreeTimes(person1_Schedule_Minutes, person1_DailyAct_Minutes)
-person2_Gaps=findFreeTimes(person2_Schedule_Minutes, person2_DailyAct_Minutes)
-
-valid_times=findValidTimes(person1_Gaps, person2_Gaps, duration_of_meeting)
-converted_back=convertTo24Format(valid_times)
-print('valid intervals in 24 format: ', converted_back)
-#sample #3 output
-#[['10:30', '11:30'], ['13:30', '15:00']]
+            print(output)
+            schedules=[] #empty schedules list for next test case
+            clock_in_out=[] #empty clock in/out list for next test case
