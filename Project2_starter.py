@@ -102,18 +102,18 @@ def findValidTimes(schedule1, schedule2, duration): #find overlaps in both perso
 
     return valid_times #return list of valid time intervals
 
-#BELOW CODE IS NOT PART OF THE ALGORITHM, ONLY READS INPUT FROM INPUT.TXT FILE
-output=None
+#BELOW CODE IS NOT PART OF THE ALGORITHM, ONLY READS INPUT FROM INPUT.TXT FILE AND WRITES TO OUTPUT.TXT FILE
+output=None #initialize output
 with open('input.txt', 'r') as file, open('output.txt', 'w') as output_file:
     content = file.read().strip().split("\n\n")  #split by double newlines for each test case
 
-    for case in content:
+    for case in content: #iterate through cases
         lines = case.strip().splitlines()
-        schedules = []
-        clock_in_out = []
-        duration_of_meeting = None
+        schedules = [] #initialize schedules list
+        clock_in_out = [] #intitalize clock in/out list
+        duration_of_meeting = None #initialize duration of meeting
 
-        for line in lines:
+        for line in lines: #interpret each line
             if line.startswith("duration_of_meeting"): #indicator of meeting duration
                 duration_of_meeting = int(line.split('=')[1].strip()) #get meeting duration
 
@@ -140,7 +140,7 @@ with open('input.txt', 'r') as file, open('output.txt', 'w') as output_file:
                     free_time_intervals.append(valid_times) #append the valid times interval to the back of the free times interval list to check for overlap with remaining intervals 
 
                 output=convertTo24Format(free_time_intervals[0]) #list of valid times
-                output_file.write(f"{output}\n\n")
+                output_file.write(f"{output}\n\n") #write output to output.txt file
                 print(output)
                 schedules=[] #empty schedules list for next test case
                 clock_in_out=[] #empty clock in/out list for next test case
