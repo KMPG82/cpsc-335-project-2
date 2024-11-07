@@ -69,7 +69,8 @@ def findFreeTimes(schedule, dailyAct): #function that finds intervals of free ti
             if start_clock_in_difference >= 0: #if difference is more than or equal to 0, it is within their clock in and clock out time
                 free_time.append([start_time, end_time]) #add to free time list
             else:
-                free_time.append([clock_in, end_time]) #if not, free time interval will start when they clock in and will last until time of next meeting
+                if end_time-clock_in > 0: #check if end time is within their clock in/out time
+                    free_time.append([clock_in, end_time]) #if not, free time interval will start when they clock in and will last until time of next meeting
 
             if i+1==len(schedule)-1: #when we are at the last meeting in their schedule
                 end_of_last_meeting = schedule[i+1][1]#get the ending time of the last meeting
