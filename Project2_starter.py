@@ -1,3 +1,4 @@
+#program by: Kevin Ponting, Alex Labitigan, Kali Ingco, John Paik
 from datetime import datetime
 
 def convertToMinutes(schedule, dailyAct):
