@@ -14,11 +14,17 @@ Instructions:
    -Type Python in the search box, and install the Python extension by
    Microsoft if not already installed.
 
-3. Open the Program:
+3. Extract Files:
+
+   -Please extract all files from the zip folder. Extract all of them into
+   the same folder, so that the program file can access the input.txt and
+   output.txt files.
+
+4. Open the Program:
 
    -Open Project2_starter.py file in Visual Studio Code.
 
-4. Run the Program:
+5. Run the Program:
 
    -Hover over the play button (it should look like this: ▶) near the
    top right corner of the window. If it doesn't say "Run Python File",
@@ -33,7 +39,7 @@ Instructions:
    -The output is also written into the output.txt if you would like a
    better view of the output.
 
-5. Add Your Own Test Case(s):
+6. Add Your Own Test Case(s):
 
    -To test the program using your own test case(s), please open the
    inputs.txt file.
@@ -44,6 +50,6 @@ Instructions:
    -Make sure that your new test case(s) is between two newline characters(\n),
    just as the other test cases are.
 
-6. Run Program with New Test Cases:
+7. Run Program with New Test Cases:
 
    -Once added, click on the play button again to run the program.
