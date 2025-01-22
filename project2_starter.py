@@ -1,4 +1,4 @@
-#program by: Kevin Ponting, Alex Labitigan, Kali Ingco, John Paik
+#program by: Kevin Ponting, Alex Labitigan, Kali Ingco, John Paikk
 from datetime import datetime
 
 def convertToMinutes(schedule, dailyAct):
